@@ -1,10 +1,41 @@
 'use strict'
 
 const $ = require('jquery')
+const { signer } = require('sawtooth-sdk/client')
 
 // Config variables
+const KEY_NAME = 'transfer-chain.keys'
 const API_URL = 'http://localhost:8080'
 const PREFIX = '19d832'
+
+// Fetch key-pairs from localStorage
+const getKeys = () => {
+  const storedKeys = localStorage.getItem(KEY_NAME)
+  if (!storedKeys) return []
+
+  return storedKeys.split(';').map((pair) => {
+    const separated = pair.split(',')
+    return {
+      public: separated[0],
+      private: separated[1]
+    }
+  })
+}
+
+// Create new key-pair
+const makeKeyPair = () => {
+  const privateKey = signer.makePrivateKey()
+  return {
+    public: signer.getPublicKey(privateKey),
+    private: privateKey
+  }
+}
+
+// Save key-pairs to localStorage
+const saveKeys = keys => {
+  const paired = keys.map(pair => [pair.public, pair.private].join(','))
+  localStorage.setItem(KEY_NAME, paired.join(';'))
+}
 
 // Fetch current Transfer Chain state from validator
 const getState = cb => {
@@ -21,5 +52,8 @@ const getState = cb => {
 }
 
 module.exports = {
+  getKeys,
+  makeKeyPair,
+  saveKeys,
   getState
 }
