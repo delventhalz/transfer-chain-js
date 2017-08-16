@@ -1,0 +1,26 @@
+{
+  "name": "transfer-chain-processor",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/delventhalz/transfer-chain-js.git"
+  },
+  "author": "Zac Delventhal <delventhalz@gmail.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/delventhalz/transfer-chain-js/issues"
+  },
+  "homepage": "https://github.com/delventhalz/transfer-chain-js#readme",
+  "dependencies": {
+    "sawtooth-sdk": "^0.8.1"
+  },
+  "devDependencies": {
+    "request": "^2.81.0"
+  }
+}
