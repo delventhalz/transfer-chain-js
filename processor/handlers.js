@@ -30,6 +30,21 @@ const transferAsset = (asset, owner, state) => {
   return state.set({[address]: encode({asset, owner})})
 }
 
+// Accept a transfer, clearing it and changing asset ownership
+const acceptTransfer = (asset, signer, state) => {
+  const address = getTransferAddress(asset)
+  return state.set({
+    [address]: Buffer(0),
+    [getAssetAddress(asset)]: encode({name: asset, owner: signer})
+  })
+}
+
+// Reject a transfer, clearing it
+const rejectTransfer = (asset, signer, state) => {
+  const address = getTransferAddress(asset)
+  return state.set({[address]: Buffer(0)})
+}
+
 // Handler for JSON encoded payloads
 class JSONHandler extends TransactionHandler {
   constructor () {
@@ -45,10 +60,12 @@ class JSONHandler extends TransactionHandler {
     // Call the appropriate function based on the payload's action
     if (action === 'create') return createAsset(asset, signer, state)
     if (action === 'transfer') return transferAsset(asset, owner, state)
+    if (action === 'accept') return acceptTransfer(asset, signer, state)
+    if (action === 'reject') return rejectTransfer(asset, signer, state)
 
     return Promise.resolve().then(() => {
       throw new InvalidTransaction(
-        'Action must be "create" or "transfer"'
+        'Action must be "create", "transfer", "accept", or "reject"'
       )
     })
   }
