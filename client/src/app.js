@@ -8,10 +8,27 @@ const {
   submitUpdate
 } = require('./state')
 
+// Application Object
+const app = { user: null, keys: [], assets: [], transfers: [] }
+
+app.refresh = function () {
+  getState(({ assets, transfers }) => {
+    this.assets = assets
+    this.transfers = transfers
+  })
+}
+
+app.update = function (action, asset, owner) {
+  if (this.user) {
+    submitUpdate(
+      { action, asset, owner },
+      this.user.private,
+      success => success ? this.refresh() : null
+    )
+  }
+}
+
 saveKeys([makeKeyPair()])
-console.log(getKeys())
-submitUpdate(
-  {action: 'create', asset: 'foo' + Date.now()},
-  getKeys()[0].private,
-  success => getState(data => console.log(data))
-)
+app.keys = getKeys()
+app.user = app.keys[0]
+app.update('create', 'foo' + Date.now())
