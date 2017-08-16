@@ -1,5 +1,6 @@
 'use strict'
 
+const $ = require('jquery')
 const {
   getKeys,
   makeKeyPair,
@@ -7,6 +8,7 @@ const {
   getState,
   submitUpdate
 } = require('./state')
+const { addOption } = require('./components')
 
 // Application Object
 const app = { user: null, keys: [], assets: [], transfers: [] }
@@ -28,7 +30,24 @@ app.update = function (action, asset, owner) {
   }
 }
 
-saveKeys([makeKeyPair()])
+// Select User
+$('[name="keySelect"]').on('change', function () {
+  if (this.value === 'new') {
+    app.user = makeKeyPair()
+    app.keys.push(app.user)
+    saveKeys(app.keys)
+    addOption(this, app.user.public, true)
+    addOption('[name="transferSelect"]', app.user.public)
+    app.update('create', 'foo' + Date.now())
+  } else if (this.value === 'none') {
+    app.user = null
+  } else {
+    app.user = app.keys.find(key => key.public === this.value)
+    app.update('create', 'foo' + Date.now())
+  }
+})
+
+// Initialize
 app.keys = getKeys()
-app.user = app.keys[0]
-app.update('create', 'foo' + Date.now())
+app.keys.forEach(pair => addOption('[name="keySelect"]', pair.public))
+app.refresh()
