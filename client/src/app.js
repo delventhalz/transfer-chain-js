@@ -47,13 +47,18 @@ $('[name="keySelect"]').on('change', function () {
     saveKeys(app.keys)
     addOption(this, app.user.public, true)
     addOption('[name="transferSelect"]', app.user.public)
-    app.update('create', 'foo' + Date.now())
   } else if (this.value === 'none') {
     app.user = null
   } else {
     app.user = app.keys.find(key => key.public === this.value)
-    app.update('create', 'foo' + Date.now())
+    app.refresh()
   }
+})
+
+// Create Asset
+$('#createSubmit').on('click', function () {
+  const asset = $('#createName').val()
+  if (asset) app.update('create', asset)
 })
 
 // Initialize
