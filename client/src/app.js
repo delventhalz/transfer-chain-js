@@ -4,9 +4,14 @@ const {
   getKeys,
   makeKeyPair,
   saveKeys,
-  getState
+  getState,
+  submitUpdate
 } = require('./state')
 
 saveKeys([makeKeyPair()])
 console.log(getKeys())
-getState(data => console.log(data))
+submitUpdate(
+  {action: 'create', asset: 'foo' + Date.now()},
+  getKeys()[0].private,
+  success => getState(data => console.log(data))
+)
