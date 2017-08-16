@@ -10,8 +10,15 @@ const {
 } = require('./state')
 const {
   addOption,
-  addRow
+  addRow,
+  addAction
 } = require('./components')
+
+const concatNewOwners = (existing, ownerContainers) => {
+  return existing.concat(ownerContainers
+    .filter(({ owner }) => !existing.includes(owner))
+    .map(({ owner }) => owner))
+}
 
 // Application Object
 const app = { user: null, keys: [], assets: [], transfers: [] }
@@ -23,9 +30,27 @@ app.refresh = function () {
 
     // Clear existing data views
     $('#assetList').empty()
+    $('#transferList').empty()
+    $('[name="assetSelect"]').children().slice(1).remove()
+    $('[name="transferSelect"]').children().slice(1).remove()
 
     // Populate asset views
-    assets.forEach(asset => addRow('#assetList', asset.name, asset.owner))
+    assets.forEach(asset => {
+      addRow('#assetList', asset.name, asset.owner)
+      if (this.user && asset.owner === this.user.public) {
+        addOption('[name="assetSelect"]', asset.name)
+      }
+    })
+
+    // Populate transfer list for selected user
+    transfers.filter(transfer => transfer.owner === this.user.public)
+      .forEach(transfer => addAction('#transferList', transfer.asset, 'Accept'))
+
+    // Populate transfer select with both local and blockchain keys
+    let publicKeys = this.keys.map(pair => pair.public)
+    publicKeys = concatNewOwners(publicKeys, assets)
+    publicKeys = concatNewOwners(publicKeys, transfers)
+    publicKeys.forEach(key => addOption('[name="transferSelect"]', key))
   })
 }
 
@@ -59,6 +84,24 @@ $('[name="keySelect"]').on('change', function () {
 $('#createSubmit').on('click', function () {
   const asset = $('#createName').val()
   if (asset) app.update('create', asset)
+})
+
+// Transfer Asset
+$('#transferSubmit').on('click', function () {
+  const asset = $('[name="assetSelect"]').val()
+  const owner = $('[name="transferSelect"]').val()
+  if (asset && owner) app.update('transfer', asset, owner)
+})
+
+// Accept Asset
+$('#transferList').on('click', '.accept', function () {
+  const asset = $(this).prev().text()
+  if (asset) app.update('accept', asset)
+})
+
+$('#transferList').on('click', '.reject', function () {
+  const asset = $(this).prev().prev().text()
+  if (asset) app.update('reject', asset)
 })
 
 // Initialize
