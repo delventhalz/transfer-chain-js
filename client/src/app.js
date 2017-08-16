@@ -8,7 +8,10 @@ const {
   getState,
   submitUpdate
 } = require('./state')
-const { addOption } = require('./components')
+const {
+  addOption,
+  addRow
+} = require('./components')
 
 // Application Object
 const app = { user: null, keys: [], assets: [], transfers: [] }
@@ -17,6 +20,12 @@ app.refresh = function () {
   getState(({ assets, transfers }) => {
     this.assets = assets
     this.transfers = transfers
+
+    // Clear existing data views
+    $('#assetList').empty()
+
+    // Populate asset views
+    assets.forEach(asset => addRow('#assetList', asset.name, asset.owner))
   })
 }
 
