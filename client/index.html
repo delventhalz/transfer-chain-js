@@ -6,6 +6,37 @@
 <body>
 <h1>Transfer Chain</h1>
 
+<h2>Select User</h2>
+<select name="keySelect">
+  <option value="none" selected>Select public key...</option>
+  <option value="new">Create new key pair</option>
+</select>
+
+<h2>Create Asset</h2>
+<input id="createName" type="text" placeholder="Enter asset name...">
+<input id="createSubmit" type="button" value="Create">
+
+<h2>Transfer Asset</h2>
+<select name="assetSelect">
+  <option value="none" selected>Select asset...</option>
+</select>
+<select name="transferSelect">
+  <option value="none" selected>Select recipient...</option>
+</select>
+<input id="transferSubmit" type="button" value="Transfer">
+
+<h2>Accept Asset</h2>
+<div id="transferList"></div>
+
+<h2>Asset List</h2>
+<table>
+  <tr>
+    <th>Asset</th>
+    <th>Owner</th>
+  </tr>
+  <tbody id="assetList"></tbody>
+</table>
+
 <script src="dist/bundle.js"></script>
 </body>
 </html>
