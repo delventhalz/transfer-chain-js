@@ -14,12 +14,20 @@ const FAMILY = 'transfer-chain'
 const PREFIX = getAddress(FAMILY, 6)
 
 const getAssetAddress = name => PREFIX + '00' + getAddress(name, 62)
+const getTransferAddress = asset => PREFIX + '01' + getAddress(asset, 62)
+
 const encode = obj => Buffer.from(JSON.stringify(obj, Object.keys(obj).sort()))
 
 // Add a new asset to state
 const createAsset = (asset, owner, state) => {
   const address = getAssetAddress(asset)
   return state.set({[address]: encode({name: asset, owner})})
+}
+
+// Add a new transfer to state
+const transferAsset = (asset, owner, state) => {
+  const address = getTransferAddress(asset)
+  return state.set({[address]: encode({asset, owner})})
 }
 
 // Handler for JSON encoded payloads
@@ -32,14 +40,15 @@ class JSONHandler extends TransactionHandler {
     // Parse the transaction header and payload
     const header = TransactionHeader.decode(txn.header)
     const signer = header.signerPubkey
-    const { action, asset } = JSON.parse(txn.payload)
+    const { action, asset, owner } = JSON.parse(txn.payload)
 
     // Call the appropriate function based on the payload's action
     if (action === 'create') return createAsset(asset, signer, state)
+    if (action === 'transfer') return transferAsset(asset, owner, state)
 
     return Promise.resolve().then(() => {
       throw new InvalidTransaction(
-        'Action must be "create"'
+        'Action must be "create" or "transfer"'
       )
     })
   }
