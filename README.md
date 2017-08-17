@@ -91,3 +91,11 @@ before it is finalized.
 Any pending transfers for the selected user will appear under _"Accept Asset"_.
 These can be accepted (with an immediate change in ownership) or rejected with
 the corresponding buttons.
+
+## Midwest JS 2017 Slides
+
+This project was originally developed as an example for a talk at MidwestJS
+2017: _Blockchain App Development with JavaScript and Hyperledger Sawtooth_.
+The slides for this talk are available online:
+
+[http://slides.com/delventhalz/blockchain-apps](http://slides.com/delventhalz/blockchain-apps)
