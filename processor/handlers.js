@@ -49,7 +49,7 @@ const transferAsset = (asset, owner, signer, state) => {
       }
 
       if (signer !== decode(entry).owner) {
-        throw new InvalidTransaction('Only a Asset\'s owner may transfer it')
+        throw new InvalidTransaction('Only an Asset\'s owner may transfer it')
       }
 
       return state.set({
@@ -107,7 +107,7 @@ const rejectTransfer = (asset, signer, state) => {
 // Handler for JSON encoded payloads
 class JSONHandler extends TransactionHandler {
   constructor () {
-    console.log('Initializing JSON handler for Transaction-Chain')
+    console.log('Initializing JSON handler for Transfer-Chain')
     super(FAMILY, '0.0', 'application/json', [PREFIX])
   }
 
@@ -118,7 +118,10 @@ class JSONHandler extends TransactionHandler {
     const { action, asset, owner } = JSON.parse(txn.payload)
 
     // Call the appropriate function based on the payload's action
-    console.log(`Handling: ${action} > ${asset} > ${owner || ''} :: ${signer.slice(0, 8)}...`)
+    console.log(`Handling transaction:  ${action} > ${asset}`,
+                owner ? `> ${owner.slice(0, 8)}... ` : '',
+                `:: ${signer.slice(0, 8)}...`)
+
     if (action === 'create') return createAsset(asset, signer, state)
     if (action === 'transfer') return transferAsset(asset, owner, signer, state)
     if (action === 'accept') return acceptTransfer(asset, signer, state)
