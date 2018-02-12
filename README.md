@@ -36,22 +36,22 @@ npm run build
 Use the included docker compose file to spin up some default Sawtooth
 components, including a validator and a REST API. Full instructions are
 available in the
-[Sawtooth Documentation](http://intelledger.github.io/app_developers_guide/docker.html),
+[Sawtooth Documentation](https://sawtooth.hyperledger.org/docs/core/releases/0.8/app_developers_guide/docker.html),
 but all you really need to know is, from the project directory, run this
 command to start Sawtooth up:
 
 ```bash
-docker-compose -f sawtooth-default.yaml up
+docker-compose up
 ```
 
 And run this command to shut them down:
 
 ```bash
-docker-compose -f sawtooth-default.yaml down
+docker-compose down
 ```
 
 Once running, you should be able to access the validator at
-`tcp://localhost:4004` and the REST API at `http://localhost:8080`.
+`tcp://localhost:4004` and the REST API at `http://localhost:8008`.
 
 ### Transaction Processor
 

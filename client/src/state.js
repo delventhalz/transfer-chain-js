@@ -9,7 +9,7 @@ const {
 
 // Config variables
 const KEY_NAME = 'transfer-chain.keys'
-const API_URL = 'http://localhost:8080'
+const API_URL = 'http://localhost:8008'
 
 const FAMILY = 'transfer-chain'
 const VERSION = '0.0'
