@@ -1,8 +1,7 @@
 # Transfer Chain JS
 
 An example of a simple blockchain app written entirely in JavaScript with
-[Hyperledger Sawtooth](https://github.com/hyperledger/sawtooth-core). _Transfer
-Chain_ allows users to create named assets and transfer them between
+[Hyperledger Sawtooth](https://github.com/hyperledger/sawtooth-core). This app allows users to create named assets and transfer them between
 different owners designated by a public key.
 
 This repo includes a _Transaction Processor_ which will can interface with a
