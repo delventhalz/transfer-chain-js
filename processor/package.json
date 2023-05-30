@@ -18,6 +18,10 @@
   },
   "homepage": "https://github.com/delventhalz/transfer-chain-js#readme",
   "dependencies": {
+    "@toruslabs/eccrypto": "^3.0.0",
+    "eccrypto": "^1.1.6",
+    "eccrypto-js": "^5.4.0",
+    "eciesjs": "^0.3.16",
     "sawtooth-sdk": "^0.8.1"
   },
   "devDependencies": {

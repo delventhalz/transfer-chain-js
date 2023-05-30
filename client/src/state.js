@@ -52,9 +52,10 @@ const getState = cb => {
         const parsed = JSON.parse(atob(datum.data))
         if (datum.address[7] === '0') processed.assets.push(parsed)
         if (datum.address[7] === '1') processed.transfers.push(parsed)
+        if (datum.address[7] === '2') processed.parameters.push(parsed)
       }
       return processed
-    }, {assets: [], transfers: []}))
+    }, {assets: [], transfers: [], parameters: []}))
   })
 }
 

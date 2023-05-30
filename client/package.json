@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/delventhalz/transfer-chain-js#readme",
   "dependencies": {
+    "eciesjs": "^0.3.16",
     "jquery": "^3.2.1",
     "sawtooth-sdk": "^0.8.1"
   },
