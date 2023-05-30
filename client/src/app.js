@@ -21,25 +21,22 @@ const concatNewOwners = (existing, ownerContainers) => {
 }
 
 // Application Object
-const app = { user: null, keys: [], assets: [], transfers: [], parameters: [] }
+const app = { user: null, keys: [], assets: [], transfers: [] }
 
 app.refresh = function () {
-  getState(({ assets, transfers, parameters }) => {
+  getState(({ assets, transfers }) => {
     this.assets = assets
     this.transfers = transfers
-    this.parameters = parameters
 
     // Clear existing data views
     $('#assetList').empty()
     $('#transferList').empty()
-    $('#parameterList').empty()
     $('[name="assetSelect"]').children().slice(1).remove()
     $('[name="transferSelect"]').children().slice(1).remove()
-    $('[name="parameterSelect"]').children().slice(1).remove()
 
     // Populate asset views
     assets.forEach(asset => {
-      addRow('#assetList', asset.name, asset.owner, asset.parameter)
+      addRow('#assetList', asset.name, asset.owner)
       if (this.user && asset.owner === this.user.public) {
         addOption('[name="assetSelect"]', asset.name)
       }
@@ -53,15 +50,14 @@ app.refresh = function () {
     let publicKeys = this.keys.map(pair => pair.public)
     publicKeys = concatNewOwners(publicKeys, assets)
     publicKeys = concatNewOwners(publicKeys, transfers)
-    publicKeys = concatNewOwners(publicKeys, parameters)
     publicKeys.forEach(key => addOption('[name="transferSelect"]', key))
   })
 }
 
-app.update = function (action, asset, owner, parameter) {
+app.update = function (action, asset, owner) {
   if (this.user) {
     submitUpdate(
-      { action, asset, owner, parameter },
+      { action, asset, owner },
       this.user.private,
       success => success ? this.refresh() : null
     )
@@ -94,8 +90,7 @@ $('#createSubmit').on('click', function () {
 $('#transferSubmit').on('click', function () {
   const asset = $('[name="assetSelect"]').val()
   const owner = $('[name="transferSelect"]').val()
-  const parameter = $('[name="parameterSelect"]').val()
-  if (asset && owner) app.update('transfer', asset, owner, parameter)
+  if (asset && owner) app.update('transfer', asset, owner)
 })
 
 // Accept Asset
