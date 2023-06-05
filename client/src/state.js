@@ -25,7 +25,7 @@ const getKeys = () => {
     return {
       public: separated[0],
       private: separated[1]
-    }
+    } 
   })
 }
 

@@ -13,6 +13,10 @@ const {
   addRow,
   addAction
 } = require('./components')
+// const {
+//   makeKeyPair2,
+//   eciesTransfer
+// } = require('encTransfer')//new
 
 const concatNewOwners = (existing, ownerContainers) => {
   return existing.concat(ownerContainers
@@ -21,7 +25,7 @@ const concatNewOwners = (existing, ownerContainers) => {
 }
 
 // Application Object
-const app = { user: null, keys: [], assets: [], transfers: [] }
+const app = { user: null, keys: [], assets: [], transfers: [], /* transferKeys: [] */ }//new
 
 app.refresh = function () {
   getState(({ assets, transfers }) => {
@@ -88,6 +92,8 @@ $('#createSubmit').on('click', function () {
 
 // Transfer Asset
 $('#transferSubmit').on('click', function () {
+  //app.transferKeys =makeKeyPair2()//new
+  //saveKeys(app.transferKeys)//new
   const asset = $('[name="assetSelect"]').val()
   const owner = $('[name="transferSelect"]').val()
   if (asset && owner) app.update('transfer', asset, owner)

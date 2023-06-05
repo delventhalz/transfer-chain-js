@@ -19,18 +19,26 @@ const PREFIX = getAddress(FAMILY, 6)
 
 const getAssetAddress = name => PREFIX + '00' + getAddress(name, 62)
 const getTransferAddress = asset => PREFIX + '01' + getAddress(asset, 62)
-const getAssetParameters = asset => PREFIX + '02' + getAddress(asset, 62) //trying to generate unique parameters  for each device
+const getAssetParameters = asset => String(PREFIX + '02' + getAddress(asset, 62)) //trying to generate unique parameters  for each device
 
 const encode = obj => Buffer.from(JSON.stringify(obj, Object.keys(obj).sort()))
 const decode = buf => JSON.parse(buf.toString())
 
+/* const {
+  //makeKeyPair2,
+  eciesTransfer
+} = require('./encTransfer')//new
+ */
+
 
 
 // Add a new asset to state
-const createAsset = (asset, owner, state) => {
+const createAsset = (asset, owner,  state) => {
   const address = getAssetAddress(asset)
-  console.log('The asset parameters:')
-  console.log(getAssetParameters(asset))
+  //console.log('The asset parameters:')
+  //console.log(getAssetParameters(asset))
+  
+  //console.log(typeof parameters)
   
 
   return state.get([address])
@@ -51,6 +59,7 @@ const createAsset = (asset, owner, state) => {
 const transferAsset = (asset, owner, signer, state) => {
   const address = getTransferAddress(asset)
   const assetAddress = getAssetAddress(asset)
+  //const parameters = getAssetParameters(asset)
 
   return state.get([assetAddress])
     .then(entries => {
@@ -74,6 +83,7 @@ const transferAsset = (asset, owner, signer, state) => {
 // Accept a transfer, clearing it and changing asset ownership
 const acceptTransfer = (asset, signer, state) => {
   const address = getTransferAddress(asset)
+  const parameters = getAssetParameters(asset)
 
   return state.get([address])
     .then(entries => {
@@ -87,6 +97,23 @@ const acceptTransfer = (asset, signer, state) => {
           'Transfers can only be accepted by the new owner'
         )
       }
+
+      //const transferKeys = makeKeyPair2()
+      // const output = eciesTransfer(parameters/* , transferKeys.receiverPublicKey, transferKeys.receiverPrivateKey */)
+      // console.log(output);
+
+      
+
+      var privateKeyB = eccrypto.generatePrivate();
+      var publicKeyB = eccrypto.getPublic(privateKeyB);
+
+    // Encrypting the message for B.
+      eccrypto.encrypt(publicKeyB, parameters).then(function(encrypted) {
+        // B decrypting the message.
+        eccrypto.decrypt(privateKeyB, encrypted).then(function(plaintext) {
+          console.log("Parameters:", plaintext.toString());
+        });
+      });
 
       return state.set({
         [address]: Buffer(0),
