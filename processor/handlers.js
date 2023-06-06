@@ -7,6 +7,13 @@ const { TransactionHeader } = require('sawtooth-sdk/protobuf')
 
 var eccrypto = require("eccrypto");
 
+//const prompt = require('prompt-sync')();
+
+const readline = require('readline').createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
 // Encoding helpers and constants
 const getAddress = (key, length = 64) => {
   return createHash('sha512').update(key).digest('hex').slice(0, length)
@@ -115,6 +122,26 @@ const acceptTransfer = (asset, signer, state) => {
         });
       });
 
+
+      readline.question('Do you want to bootstrap the device?(y/n)', bs => {
+        if(bs == 'n'){
+          // throw new InvalidTransaction(
+          //   'Bootstrapping cancelled')
+            console.log('Bootstrapping cancelled')
+        }
+        else{
+          console.log('Device Bootstrapped')
+        }
+        readline.close();
+      });
+
+      // const bs = prompt('Do you want to bootstrap the device?(y/n)');
+      //   if(bs == 'n'){
+      //     throw new InvalidTransaction(
+      //       'Bootstrapping cancelled')
+      //   }
+      //   console.log('Device Bootstrapped')
+
       return state.set({
         [address]: Buffer(0),
         [getAssetAddress(asset)]: encode({name: asset, owner: signer})
@@ -143,6 +170,29 @@ const rejectTransfer = (asset, signer, state) => {
       })
     })
 }
+
+// const bootstrap = (/* asset, */ signer, state) => {
+//   //const parameters = getAssetParameters(asset)
+  
+//   return state.get([address])
+//     .then(entries => {
+//       const entry = entries[address]
+
+//       if (signer !== decode(entry).owner) {
+//         throw new InvalidTransaction(
+//           'Only the owner can initiate bootstrapping')
+//       }
+//       // if (parameters !== decode(entry).parameters) {
+//       //   throw new InvalidTransaction(
+//       //     'parameters do not match the ones in records')
+//       // }
+
+//       return state.set({
+//         [address]: Buffer(0)
+//       })
+//     })
+// }
+
 
 // Handler for JSON encoded payloads
 class JSONHandler extends TransactionHandler {
