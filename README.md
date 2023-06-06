@@ -1,8 +1,14 @@
-# Transfer Chain JS
+# Zero-Touch Bootstrapping Using Hyperledger Sawtooth
 
 An example of a simple blockchain app written entirely in JavaScript with
-[Hyperledger Sawtooth](https://github.com/hyperledger/sawtooth-core). This app allows users to create named assets and transfer them between
-different owners designated by a public key.
+[Hyperledger Sawtooth](https://github.com/hyperledger/sawtooth-core). This app has the following functionalitites:
+* Can add users and generate unique public-private keypairs for them.
+* Allows users to add named (IoT) devices and generate unique bootstrapping parameters for each of them.
+* Can make signed transfers of the devices between users.
+* Can perform encrypted and signed transfer of bootstrapping parameters using ECIES
+* Uses the transferred parameters to bootstrap the device
+
+Different owners are designated by their public keys. 
 
 This repo includes a _Transaction Processor_ which will can interface with a
 Sawtooth validator and handle validation of transactions, and a simple
@@ -73,28 +79,25 @@ Users are just public/private key-pairs stored in localStorage. Create one from
 the _"Select User"_ dropdown. You can use this same dropdown to switch between
 multiple users in localStorage.
 
-### Create an Asset
+### Create a Device
 
-Simple type in the name of your asset under _"Create Asset"_ and click the
-create button. If you selected a user, you should see that asset appear in the
+Simple type in the name of your device under _"Create device"_ and click the
+create button. If you selected a user, you should see that device appear in the
 list at the bottom.
 
-### Transfer an Asset
+### Transfer an device
 
-Any asset you own can be transfered to another public key using the dropdowns
-under _"Transfer Asset"_. Note that the transfer must be accepted by that user
+Any device you own can be transfered to another public key using the dropdowns
+under _"Transfer device"_. Note that the transfer must be accepted by that user
 before it is finalized.
 
 ### Accept or Reject Transfers
 
-Any pending transfers for the selected user will appear under _"Accept Asset"_.
+Any pending transfers for the selected user will appear under _"Accept device"_.
 These can be accepted (with an immediate change in ownership) or rejected with
 the corresponding buttons.
 
-## Midwest JS 2017 Slides
+### Bootstrap Device
 
-This project was originally developed as an example for a talk at MidwestJS
-2017: _Blockchain App Development with JavaScript and Hyperledger Sawtooth_.
-The slides for this talk are available online:
+Once a device is accepted, its new user can choose to or not to bootstrap it. This is carried out in the backend in the console for each user to securely view the parameters and intiate bootstrapping. 
 
-[http://slides.com/delventhalz/blockchain-apps](http://slides.com/delventhalz/blockchain-apps)
