@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Transfer Chain</title>
+  <title>IoT Device Management</title>
 </head>
 <body>
-<h1>Transfer Chain</h1>
+<h1>Zero-Touch Bootstrapping using Hyperledger Sawtooth</h1>
 
 <h2>Select User</h2>
 <select name="keySelect">
@@ -12,26 +12,26 @@
   <option value="new">Create new key pair</option>
 </select>
 
-<h2>Create Asset</h2>
-<input id="createName" type="text" placeholder="Enter asset name...">
+<h2>Add Device</h2>
+<input id="createName" type="text" placeholder="Enter device name...">
 <input id="createSubmit" type="button" value="Create">
 
-<h2>Transfer Asset</h2>
+<h2>Transfer Device</h2>
 <select name="assetSelect">
-  <option value="none" selected>Select asset...</option>
+  <option value="none" selected>Select device...</option>
 </select>
 <select name="transferSelect">
   <option value="none" selected>Select recipient...</option>
 </select>
 <input id="transferSubmit" type="button" value="Transfer">
 
-<h2>Accept Asset</h2>
+<h2>Accept Device</h2>
 <div id="transferList"></div>
 
-<h2>Asset List</h2>
+<h2>Device List</h2>
 <table>
   <tr>
-    <th>Asset</th>
+    <th>Device</th>
     <th>Owner</th>
   </tr>
   <tbody id="assetList"></tbody>
