@@ -26,26 +26,18 @@ const PREFIX = getAddress(FAMILY, 6)
 
 const getAssetAddress = name => PREFIX + '00' + getAddress(name, 62)
 const getTransferAddress = asset => PREFIX + '01' + getAddress(asset, 62)
-const getAssetParameters = asset => String(PREFIX + '02' + getAddress(asset, 62)) //trying to generate unique parameters  for each device
+const getAssetParameters = asset => String(PREFIX + '02' + getAddress(asset, 62)) 
 
 const encode = obj => Buffer.from(JSON.stringify(obj, Object.keys(obj).sort()))
 const decode = buf => JSON.parse(buf.toString())
 
-/* const {
-  //makeKeyPair2,
-  eciesTransfer
-} = require('./encTransfer')//new
- */
+
 
 
 
 // Add a new asset to state
 const createAsset = (asset, owner,  state) => {
   const address = getAssetAddress(asset)
-  //console.log('The asset parameters:')
-  //console.log(getAssetParameters(asset))
-  
-  //console.log(typeof parameters)
   
 
   return state.get([address])
@@ -66,7 +58,6 @@ const createAsset = (asset, owner,  state) => {
 const transferAsset = (asset, owner, signer, state) => {
   const address = getTransferAddress(asset)
   const assetAddress = getAssetAddress(asset)
-  //const parameters = getAssetParameters(asset)
 
   return state.get([assetAddress])
     .then(entries => {
@@ -105,9 +96,6 @@ const acceptTransfer = (asset, signer, state) => {
         )
       }
 
-      //const transferKeys = makeKeyPair2()
-      // const output = eciesTransfer(parameters/* , transferKeys.receiverPublicKey, transferKeys.receiverPrivateKey */)
-      // console.log(output);
 
       
 
@@ -135,12 +123,7 @@ const acceptTransfer = (asset, signer, state) => {
         readline.close();
       });
 
-      // const bs = prompt('Do you want to bootstrap the device?(y/n)');
-      //   if(bs == 'n'){
-      //     throw new InvalidTransaction(
-      //       'Bootstrapping cancelled')
-      //   }
-      //   console.log('Device Bootstrapped')
+      
 
       return state.set({
         [address]: Buffer(0),
