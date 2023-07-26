@@ -24,7 +24,10 @@ const getAddress = (key, length = 64) => {
 const FAMILY = 'transfer-chain'
 const PREFIX = getAddress(FAMILY, 6)
 
+//address pointing to where the asset and its respective owner is stored
 const getAssetAddress = name => PREFIX + '00' + getAddress(name, 62)
+
+//same as above but here the asset is being transferred
 const getTransferAddress = asset => PREFIX + '01' + getAddress(asset, 62)
 
 //parameter generation function f
@@ -67,12 +70,8 @@ const createAsset = (asset, owner,  state) =>
 // Add a new transfer to state
 const transferAsset = (asset, owner, signer, state) => {
   
-  //next address of where the asset and its new owner is going to be stored
-  const address = getTransferAddress(asset)
-
-  //current address pointing to where the asset and its respective owner is stored
   const assetAddress = getAssetAddress(asset) 
-  
+  const address = getTransferAddress(asset)
 
   return state.get([assetAddress])
     .then(entries => {
@@ -89,7 +88,7 @@ const transferAsset = (asset, owner, signer, state) => {
 
       return state.set({
 
-        //next address of the asset when the transfer was initiated but the owner remains the same until the transfer is accepted 
+        //this address points to a state change where the asset is being transferred by its owner
         [address]: encode({asset, owner}) 
       })
     })
@@ -127,7 +126,8 @@ const acceptTransfer = (asset, signer, state) => {
   });
 
       return state.set({
-        [address]: Buffer(0), 
+        // the address pointing to the asset that was being transferred now points to nothing since the transfer has been accepted
+        [address]: Buffer(0),  
         // new address of asset with new owner
         [getAssetAddress(asset)]: encode({name: asset, owner: signer}) 
       })
@@ -144,7 +144,7 @@ const bootstrap = (asset, signer, state) => {
     .then(entries => {
       const entry = entries[assetAddress]
 
-      //matches the signature of the record with the device's owner
+      //matches the signature of the record of acceptance with the device's owner
 
       if (signer !== decode(entry).owner) {
         throw new InvalidTransaction('Only Device\'s owner may bootstrap it')
@@ -170,7 +170,7 @@ const rejectTransfer = (asset, signer, state) => {
         throw new InvalidTransaction(
           'Transfers can only be rejected by the potential new owner')
       }
-
+      // the address pointing to the asset that was being transferred now points to nothing since the transfer has been rejected
       return state.set({
         [address]: Buffer(0)
       })
@@ -217,14 +217,3 @@ module.exports = {
 }
 
 
- // readline.question('Do you want to bootstrap the device?(y/n)', bs => {
-      //   if(bs == 'n'){
-      //     // throw new InvalidTransaction(
-      //     //   'Bootstrapping cancelled')
-      //       console.log('Bootstrapping cancelled')
-      //   }
-      //   else{
-      //     console.log('Device Bootstrapped')
-      //   }
-      //   readline.close();
-      // });

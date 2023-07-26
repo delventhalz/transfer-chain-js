@@ -58,8 +58,9 @@ app.refresh = function () {
 
 app.update = function (action, asset, owner) {
   if (this.user) {
+    //ZTB once the device is accepted
     if (count === 1)
-    { count = 0 //ZTB once the device is accepted
+    { count = 0 
       submitUpdate(
         { action, asset, owner },
         this.user.private,
@@ -109,7 +110,7 @@ $('#transferSubmit').on('click', function () {
 // Accept Asset
 $('#transferList').on('click', '.accept', function () {
   const asset = $(this).prev().text()
-  count = 1
+  count = 1 //this will call the ZTB function after updating the state
   if (asset) {app.update('accept', asset);}
 })
 
