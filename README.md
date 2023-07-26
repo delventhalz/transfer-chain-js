@@ -81,13 +81,13 @@ multiple users in localStorage.
 
 ### Create a Device
 
-Simple type in the name of your device under _"Create device"_ and click the
+Simply type in the name of your device under _"Create device"_ and click the
 create button. If you selected a user, you should see that device appear in the
 list at the bottom.
 
-### Transfer an device
+### Transfer a device
 
-Any device you own can be transfered to another public key using the dropdowns
+Any device you own can be transferred to another public key using the dropdowns
 under _"Transfer device"_. Note that the transfer must be accepted by that user
 before it is finalized.
 
@@ -99,5 +99,5 @@ the corresponding buttons.
 
 ### Bootstrap Device
 
-Once a device is accepted, its new user can choose to or not to bootstrap it. This is carried out in the backend in the console for each user to securely view the parameters and intiate bootstrapping. 
+Once a device is accepted,  its owner is authenticated and a bootstrapping connection is automatically established.
 
