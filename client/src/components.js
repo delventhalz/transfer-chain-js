@@ -23,8 +23,10 @@ const addAction = (parent, label, action) => {
 </div>`)
 }
 
+
 module.exports = {
   addOption,
   addRow,
-  addAction
+  addAction, 
+  addBootstrap
 }

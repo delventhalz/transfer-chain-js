@@ -13,10 +13,8 @@ const {
   addRow,
   addAction
 } = require('./components')
-// const {
-//   makeKeyPair2,
-//   eciesTransfer
-// } = require('encTransfer')//new
+
+var count = 0
 
 const concatNewOwners = (existing, ownerContainers) => {
   return existing.concat(ownerContainers
@@ -25,7 +23,7 @@ const concatNewOwners = (existing, ownerContainers) => {
 }
 
 // Application Object
-const app = { user: null, keys: [], assets: [], transfers: [], /* transferKeys: [] */ }//new
+const app = { user: null, keys: [], assets: [], transfers: [] }
 
 app.refresh = function () {
   getState(({ assets, transfers }) => {
@@ -60,12 +58,21 @@ app.refresh = function () {
 
 app.update = function (action, asset, owner) {
   if (this.user) {
+    if (count === 1)
+    { count = 0 //ZTB once the device is accepted
+      submitUpdate(
+        { action, asset, owner },
+        this.user.private,
+        success => success ? app.update('bootstrap', asset) : null
+      )
+    }
     submitUpdate(
       { action, asset, owner },
       this.user.private,
       success => success ? this.refresh() : null
     )
   }
+  
 }
 
 // Select User
@@ -102,12 +109,15 @@ $('#transferSubmit').on('click', function () {
 // Accept Asset
 $('#transferList').on('click', '.accept', function () {
   const asset = $(this).prev().text()
-  if (asset) app.update('accept', asset)
+  count = 1
+  if (asset) {app.update('accept', asset);}
 })
 
+
+// Reject Asset
 $('#transferList').on('click', '.reject', function () {
   const asset = $(this).prev().prev().text()
-  if (asset) app.update('reject', asset)
+  if (asset) {app.update('reject', asset); }
 })
 
 // Initialize
